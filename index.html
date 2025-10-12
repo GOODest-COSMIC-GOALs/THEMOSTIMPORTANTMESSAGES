@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Startpage</title>
+<meta name="description" content="start page of buttons linking to other pages." />
+<style>
+:root {
+--bg: #0b0f14;
+--bg-2: #0f1621;
+--fg: #e7edf6;
+--muted: #9fb0c7;
+--card: rgba(255, 255, 255, 0.06);
+--card-2: rgba(255, 255, 255, 0.08);
+--border: rgba(255, 255, 255, 0.15);
+--shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+--accent: 59,130,246 ; 
+--radius: 18px;
+--focus: 0 0 0 3px rgba(var(--accent), .35), 0 10px 25px rgba(var(--accent), .15);
+}
+
+* { box-sizing: border-box }
+html, body { height: 100% }
+body {
+margin: 0; color: var(--fg);
+font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+background: radial-gradient(1200px 800px at 80% -10%, rgba(var(--accent), .18), transparent 60%),
+radial-gradient(1000px 600px at -10% 110%, rgba(72, 158, 255, .14), transparent 60%),
+linear-gradient(180deg, var(--bg), var(--bg-2));
+background-attachment: fixed;
+}
+
+/* container */
+.container {
+padding: 32px 22px 40px;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+/* header */
+header {
+align-items: center;
+margin: 8px 0 22px;
+display: flex;
+gap: 16px;
+}
+.logo {
+width: 48px; height: 48px;
+display: grid; place-items: center;
+background: linear-gradient(135deg, rgba(var(--accent), .9), rgba(72,158,255,.85));
+color: white; border-radius: 14px;
+box-shadow: var(--shadow);
+letter-spacing: -0.5px;
+user-select: none; 
+font-weight: 800;
+font-size: 28px;
+}
+h1 {
+font-size: clamp(22px, 2.4vw, 28px);
+margin: 0; letter-spacing: -0.4px;
+}
+p {
+margin: 2px 0px; font-size: 12px;
+letter-spacing: -0.4px;
+color: var(--muted);
+}
+
+/* Search */
+.search {
+display: grid;
+grid-template-columns: 1fr auto;
+gap: 12px;
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 12px 14px;
+box-shadow: var(--shadow);
+}
+.search input {
+background: transparent;
+border: none;
+outline: none;
+color: var(--fg);
+font-size: 16px;
+}
+
+/* Grid */
+.grid {
+--size: 210px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(var(--size), 1fr));
+gap: 16px;
+margin-top: 18px;
+}
+
+/* Card Link */
+.tile {
+position: relative;
+display: block;
+text-decoration: none;
+color: inherit;
+background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+border: 1px solid var(--border);
+padding: 18px;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+overflow: hidden;
+transition: transform .16s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+.tile:hover { 
+border-color: rgba(var(--accent), .45); 
+box-shadow: 0 14px 36px rgba(0,0,0,.35), 0 0 0 1px rgba(var(--accent), .18) inset; 
+transform: translateY(-1px); 
+}
+.tile:focus-visible { 
+outline: none; box-shadow: var(--focus); 
+}
+.tile .icon {
+width: 48px; height: 48px; border-radius: 12px;
+display: grid; place-items: center; font-size: 24px;
+background: linear-gradient(135deg, rgba(var(--accent), .22), rgba(72,158,255,.20));
+border: 1px solid var(--border);
+margin-bottom: 14px;
+}
+.tile h3 { letter-spacing: -0.2px; 
+font-size: 18px; margin: 6px 0 6px; 
+}
+.tile p { color: var(--muted); 
+font-size: 14px; margin: 0;
+line-height: 1.35; 
+}
+
+.hidden { display: none !important }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<div class="logo" aria-hidden="true">🖊️</div>
+<!-- Edit "<h1>" and "<p>" text if you want -->
+<div><h1>One Most Important Message ?</h1>
+<p>THOUGHT-ORIGINATED-CREATIONs to OBSERVE</p></div>
+</header>
+
+<!-- Search -->
+<label class="search" for="q">
+<input id="q" type="search" placeholder="Search…" autocomplete="off" spellcheck="false" />
+</label>
+
+<!-- Grid of Links -->
+<main class="grid" id="grid" aria-live="polite">
+
+<!-- EDIT BELOW: Duplicate an "<a> </a>" selection for (ADDING MORE BUTTONS)  -->
+
+<!-- copy a selection to duplicate button:
+start the selection from line below:
+
+(START of a new TEXT-SELECTION) = 
+<a class="tile" href="writings/note.html" tabindex="0"> 
+<div class="icon" aria-hidden>🗒️</div> 
+<h3>Writing 1</h3> 
+<p>Writing Draft</p>
+</a>
+(END of the new TEXT-SELECTION) = 
+
+
+end the selection before this line and copy the selection. Then paste it bellow the other buttons found in code below:  
+-->
+
+
+<!-- remember to 
+(UPDATE the NAMEs) of (href="folder/note.html") 
+to match your own structure and naming -->
+
+
+<a class="tile" href="MESSAGES/note.html" tabindex="0"> <!-- update href to match -->
+<div class="icon" aria-hidden>🗒️</div> 
+<!-- type whatever you want below-->
+<h3>GOODest Cosmic GOALs: in TWENTY WORDs</h3> 
+<p>LESS of BAD and MORE of GOOD</p>
+</a>
+
+<a class="tile" href="MESSAGES/ONE.html" tabindex="0"> <!-- update href to match -->
+<div class="icon" aria-hidden>🗒️</div> 
+<!-- type whatever you want below-->
+<h3>in 2000 words ?</h3>
+<p>semantic unboxing</p>
+</a>
+
+<a class="tile" href="MESSAGES/TWO.html" tabindex="0"> <!-- update href to match -->
+<div class="icon" aria-hidden>🗒️</div> 
+<!-- type whatever you want below-->
+<h3>Writing 3</h3>
+<p>Writing Draft</p>
+</a>
+
+<a class="tile" href="MESSAGES/THREE.html" tabindex="0"> <!-- update href to match -->
+<div class="icon" aria-hidden>🗒️</div> 
+<!-- type whatever you want below-->
+<h3>Writing 4</h3>
+<p>Writing Draft</p>
+</a>
+
+<a class="tile" href="MESSAGES/FOUR.html" tabindex="0"> <!-- update href to match -->
+<div class="icon" aria-hidden>🗒️</div> 
+<!-- type whatever you want below-->
+<h3>Writing 5</h3>
+<p>Writing Draft</p>
+</a>
+
+    
+    <a class="tile" href="MESSAGES/TEN.html" tabindex="0"> 
+<div class="icon" aria-hidden>🗒️</div> 
+<h3>1st Most Important Message ?</h3> 
+<p>PROTECT EVERYONE from EVERYTHING BAD ForEver</p>
+</a>
+
+    
+    
+    
+<!-- ==== EDIT ABOVE ==== -->
+</main>
+
+</div>
+<script>
+/* ================== tiny utils ================== */
+const $  = (q, root = document) => root.querySelector(q);
+const $$ = (q, root = document) => Array.from(root.querySelectorAll(q));
+
+/* ================== DOM refs ================== */
+const q     = $('#q');
+const grid  = $('#grid');
+const tiles = $$('.tile', grid);
+
+/* ================== feature flags ================== */
+/** Remote indexing only when running over http/https (not file://). */
+const ENABLE_REMOTE_INDEX = location.protocol === 'http:' || location.protocol === 'https:';
+/** Limit which links to index (adjust as needed). */
+const REMOTE_ALLOW_RE = /^writings\//;
+
+/* ================== text normalization ================== */
+function normalizeText(s) {
+  return (s || '')
+    .normalize('NFKD')                // decompose accents/compat forms
+    .replace(/\p{M}+/gu, '')          // strip combining marks
+    .replace(/[\u00A0]/g, ' ')        // nbsp -> space
+    .replace(/[\u2010-\u2015]/g, '-') // hyphen/en/em dash -> '-'
+    .replace(/[“”«»]/g, '"')          // curly quotes -> ASCII
+    .replace(/[‘’]/g, "'")
+    .replace(/\s+/g, ' ')             // collapse whitespace
+    .trim()
+    .toLowerCase();
+}
+
+/* ================== remote index (2nd function) ================== */
+let REMOTE_READY = false;
+const pageTextIndex = new Map();             // Element -> normalized text
+const INDEX_CACHE_KEY = 'startpage-remote-index-v2';
+
+function extractReadableText(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  // Remove non-content noise
+  ['script','style','noscript','template','svg','canvas','iframe'].forEach(sel =>
+    doc.querySelectorAll(sel).forEach(n => n.remove())
+  );
+
+  // Prefer main/article region; else body
+  const scope =
+    doc.querySelector('main, article, #main, [role="main"]') || doc.body;
+
+  // For your notes, include .note, .note-title, .note-content, and span
+  const keep = scope.querySelectorAll(
+    'h1,h2,h3,h4,h5,h6,p,li,dt,dd,td,th,blockquote,figcaption,.note,.note-title,.note-content,span'
+  );
+
+  const raw = keep.length
+    ? Array.from(keep).map(n => n.textContent || '').join(' ')
+    : (scope.textContent || '');
+
+  return normalizeText(raw);
+}
+
+async function fetchWithTimeout(url, ms = 6000) {
+  const ctl = new AbortController();
+  const id = setTimeout(() => ctl.abort(), ms);
+  try {
+    const res = await fetch(url, { signal: ctl.signal, credentials: 'same-origin' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+function absURL(href) { return new URL(href, location.href).toString(); }
+
+async function buildRemoteIndex() {
+  if (!ENABLE_REMOTE_INDEX) return;
+
+  // Try session cache first (per-tab)
+  try {
+    const cached = sessionStorage.getItem(INDEX_CACHE_KEY);
+    if (cached) {
+      const pairs = JSON.parse(cached); // [ [absHref, normalizedText], ... ]
+      for (const [href, text] of pairs) {
+        const tile = tiles.find(t => absURL(t.getAttribute('href')) === href);
+        if (tile) pageTextIndex.set(tile, text);
+      }
+      REMOTE_READY = true;
+      return;
+    }
+  } catch {}
+
+  const pairs = [];
+  const jobs = tiles.map(async (t) => {
+    const href = t.getAttribute('href');
+    if (!href || !REMOTE_ALLOW_RE.test(href)) { pageTextIndex.set(t, ''); return; }
+    const url = absURL(href);
+    try {
+      const html = await fetchWithTimeout(url, 8000);
+      const text = extractReadableText(html);  // already normalized
+      pageTextIndex.set(t, text);
+      pairs.push([url, text]);
+    } catch {
+      pageTextIndex.set(t, ''); // non-blocking on failure
+    }
+  });
+
+  await Promise.allSettled(jobs);
+  try { sessionStorage.setItem(INDEX_CACHE_KEY, JSON.stringify(pairs)); } catch {}
+  REMOTE_READY = true;
+}
+
+/* ================== shared haystack builder ================== */
+function buildHaystack(t, includeRemote) {
+  const title = t.querySelector('h3')?.textContent || '';
+  const desc  = t.querySelector('p')?.textContent || '';
+  const remote = includeRemote ? (pageTextIndex.get(t) || '') : '';
+
+  // Normalize local pieces so query matching is uniform
+  return [
+    t.dataset.title || '',
+    t.dataset.tags  || '',
+    title,
+    desc,
+    remote
+  ].map(normalizeText).join(' ');
+}
+
+/* ================== 1) local-only filter (original behavior) ================== */
+function filterLocal(val) {
+  const v = normalizeText(val);
+  let matches = 0;
+
+  tiles.forEach(t => {
+    const hay = buildHaystack(t, /* includeRemote */ false);
+    const ok = !v || hay.includes(v);
+    t.classList.toggle('hidden', !ok);  // uses your CSS .hidden
+    if (ok) matches++;
+  });
+
+  grid.setAttribute('aria-busy', 'false');
+  grid.dataset.matches = matches;
+}
+
+/* ================== 2) local + remote filter (augmented) ================== */
+function filterWithRemote(val) {
+  const v = normalizeText(val);
+  let matches = 0;
+
+  tiles.forEach(t => {
+    const hay = buildHaystack(t, /* includeRemote */ true);
+    const ok = !v || hay.includes(v);
+    t.classList.toggle('hidden', !ok);
+    if (ok) matches++;
+  });
+
+  grid.setAttribute('aria-busy', 'false');
+  grid.dataset.matches = matches;
+}
+
+/* ================== wiring: always responsive, remote adds later ================== */
+// Debounced input: use local filter immediately; switch to remote when ready.
+let debTimer = null;
+q.addEventListener('input', (e) => {
+  clearTimeout(debTimer);
+  const val = e.target.value;
+  debTimer = setTimeout(() => {
+    (REMOTE_READY ? filterWithRemote : filterLocal)(val);
+  }, 100);
+});
+
+/* ================== a11y live region ================== */
+const live = document.createElement('div');
+live.className = 'sr-only';
+live.setAttribute('role', 'status');
+document.body.appendChild(live);
+new MutationObserver(() => {
+  const n = grid.dataset.matches || tiles.length;
+  live.textContent = `${n} link${n == 1 ? '' : 's'} visible`;
+}).observe(grid, { attributes: true, attributeFilter: ['data-matches'] });
+
+/* ================== boot ================== */
+// Initial render (local-only so it works instantly)
+filterLocal('');
+
+// Build remote index in the background; when done, re-apply filter if user typed
+(async () => {
+  try { await buildRemoteIndex(); } catch {}
+  if (q.value) filterWithRemote(q.value);
+})();
+</script>
+
+</body>
+</html>

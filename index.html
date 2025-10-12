@@ -181,193 +181,52 @@ to match your own structure and naming -->
 
 </div>
 <script>
-/* ================== tiny utils ================== */
-const $  = (q, root = document) => root.querySelector(q);
+// ====== Local helpers ======
+const $ = (q, root = document) => root.querySelector(q);
 const $$ = (q, root = document) => Array.from(root.querySelectorAll(q));
 
-/* ================== DOM refs ================== */
-const q     = $('#q');
-const grid  = $('#grid');
+const q = $('#q');
+const grid = $('#grid');
 const tiles = $$('.tile', grid);
 
-/* ================== feature flags ================== */
-/** Remote indexing only when running over http/https (not file://). */
-const ENABLE_REMOTE_INDEX = location.protocol === 'http:' || location.protocol === 'https:';
-/** Limit which links to index (adjust as needed). */
-const REMOTE_ALLOW_RE = /^writings\//;
+// ====== Search / Filter ======
+function filter(val) {
+const v = val.trim().toLowerCase();
+let matches = 0;
+tiles.forEach(t => {
+// include <h3> and <p> text in search
+const title = t.querySelector('h3')?.textContent || '';
+const desc = t.querySelector('p')?.textContent || '';
+const hay = [
+t.dataset.title || '',
+t.dataset.tags || '',
+title,
+desc
+].join(' ').toLowerCase();
 
-/* ================== text normalization ================== */
-function normalizeText(s) {
-  return (s || '')
-    .normalize('NFKD')                // decompose accents/compat forms
-    .replace(/\p{M}+/gu, '')          // strip combining marks
-    .replace(/[\u00A0]/g, ' ')        // nbsp -> space
-    .replace(/[\u2010-\u2015]/g, '-') // hyphen/en/em dash -> '-'
-    .replace(/[“”«»]/g, '"')          // curly quotes -> ASCII
-    .replace(/[‘’]/g, "'")
-    .replace(/\s+/g, ' ')             // collapse whitespace
-    .trim()
-    .toLowerCase();
-}
-
-/* ================== remote index (2nd function) ================== */
-let REMOTE_READY = false;
-const pageTextIndex = new Map();             // Element -> normalized text
-const INDEX_CACHE_KEY = 'startpage-remote-index-v2';
-
-function extractReadableText(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-
-  // Remove non-content noise
-  ['script','style','noscript','template','svg','canvas','iframe'].forEach(sel =>
-    doc.querySelectorAll(sel).forEach(n => n.remove())
-  );
-
-  // Prefer main/article region; else body
-  const scope =
-    doc.querySelector('main, article, #main, [role="main"]') || doc.body;
-
-  // For your notes, include .note, .note-title, .note-content, and span
-  const keep = scope.querySelectorAll(
-    'h1,h2,h3,h4,h5,h6,p,li,dt,dd,td,th,blockquote,figcaption,.note,.note-title,.note-content,span'
-  );
-
-  const raw = keep.length
-    ? Array.from(keep).map(n => n.textContent || '').join(' ')
-    : (scope.textContent || '');
-
-  return normalizeText(raw);
-}
-
-async function fetchWithTimeout(url, ms = 6000) {
-  const ctl = new AbortController();
-  const id = setTimeout(() => ctl.abort(), ms);
-  try {
-    const res = await fetch(url, { signal: ctl.signal, credentials: 'same-origin' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.text();
-  } finally {
-    clearTimeout(id);
-  }
-}
-
-function absURL(href) { return new URL(href, location.href).toString(); }
-
-async function buildRemoteIndex() {
-  if (!ENABLE_REMOTE_INDEX) return;
-
-  // Try session cache first (per-tab)
-  try {
-    const cached = sessionStorage.getItem(INDEX_CACHE_KEY);
-    if (cached) {
-      const pairs = JSON.parse(cached); // [ [absHref, normalizedText], ... ]
-      for (const [href, text] of pairs) {
-        const tile = tiles.find(t => absURL(t.getAttribute('href')) === href);
-        if (tile) pageTextIndex.set(tile, text);
-      }
-      REMOTE_READY = true;
-      return;
-    }
-  } catch {}
-
-  const pairs = [];
-  const jobs = tiles.map(async (t) => {
-    const href = t.getAttribute('href');
-    if (!href || !REMOTE_ALLOW_RE.test(href)) { pageTextIndex.set(t, ''); return; }
-    const url = absURL(href);
-    try {
-      const html = await fetchWithTimeout(url, 8000);
-      const text = extractReadableText(html);  // already normalized
-      pageTextIndex.set(t, text);
-      pairs.push([url, text]);
-    } catch {
-      pageTextIndex.set(t, ''); // non-blocking on failure
-    }
-  });
-
-  await Promise.allSettled(jobs);
-  try { sessionStorage.setItem(INDEX_CACHE_KEY, JSON.stringify(pairs)); } catch {}
-  REMOTE_READY = true;
-}
-
-/* ================== shared haystack builder ================== */
-function buildHaystack(t, includeRemote) {
-  const title = t.querySelector('h3')?.textContent || '';
-  const desc  = t.querySelector('p')?.textContent || '';
-  const remote = includeRemote ? (pageTextIndex.get(t) || '') : '';
-
-  // Normalize local pieces so query matching is uniform
-  return [
-    t.dataset.title || '',
-    t.dataset.tags  || '',
-    title,
-    desc,
-    remote
-  ].map(normalizeText).join(' ');
-}
-
-/* ================== 1) local-only filter (original behavior) ================== */
-function filterLocal(val) {
-  const v = normalizeText(val);
-  let matches = 0;
-
-  tiles.forEach(t => {
-    const hay = buildHaystack(t, /* includeRemote */ false);
-    const ok = !v || hay.includes(v);
-    t.classList.toggle('hidden', !ok);  // uses your CSS .hidden
-    if (ok) matches++;
-  });
-
-  grid.setAttribute('aria-busy', 'false');
-  grid.dataset.matches = matches;
-}
-
-/* ================== 2) local + remote filter (augmented) ================== */
-function filterWithRemote(val) {
-  const v = normalizeText(val);
-  let matches = 0;
-
-  tiles.forEach(t => {
-    const hay = buildHaystack(t, /* includeRemote */ true);
-    const ok = !v || hay.includes(v);
-    t.classList.toggle('hidden', !ok);
-    if (ok) matches++;
-  });
-
-  grid.setAttribute('aria-busy', 'false');
-  grid.dataset.matches = matches;
-}
-
-/* ================== wiring: always responsive, remote adds later ================== */
-// Debounced input: use local filter immediately; switch to remote when ready.
-let debTimer = null;
-q.addEventListener('input', (e) => {
-  clearTimeout(debTimer);
-  const val = e.target.value;
-  debTimer = setTimeout(() => {
-    (REMOTE_READY ? filterWithRemote : filterLocal)(val);
-  }, 100);
+const ok = !v || hay.includes(v);
+t.classList.toggle('hidden', !ok);
+if (ok) matches++;
 });
+grid.setAttribute('aria-busy', 'false');
+grid.dataset.matches = matches;
+}
 
-/* ================== a11y live region ================== */
+// live filtering while typing
+q.addEventListener('input', e => filter(e.target.value));
+
+
+// Announce match count 
 const live = document.createElement('div');
 live.className = 'sr-only';
 live.setAttribute('role', 'status');
 document.body.appendChild(live);
-new MutationObserver(() => {
-  const n = grid.dataset.matches || tiles.length;
-  live.textContent = `${n} link${n == 1 ? '' : 's'} visible`;
-}).observe(grid, { attributes: true, attributeFilter: ['data-matches'] });
 
-/* ================== boot ================== */
-// Initial render (local-only so it works instantly)
-filterLocal('');
-
-// Build remote index in the background; when done, re-apply filter if user typed
-(async () => {
-  try { await buildRemoteIndex(); } catch {}
-  if (q.value) filterWithRemote(q.value);
-})();
+const mo = new MutationObserver(() => {
+const n = grid.dataset.matches || tiles.length;
+live.textContent = `${n} link${n == 1 ? '' : 's'} visible`;
+});
+mo.observe(grid, { attributes: true, attributeFilter: ['data-matches'] });
 </script>
 
 </body>
